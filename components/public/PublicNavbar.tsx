@@ -9,11 +9,17 @@ interface PublicNavbarProps {
   profile: ProfileWebType | null
 }
 
-export function PublicNavbar({ user, profile }: PublicNavbarProps) {
+export function PublicNavbar({
+  user,
+  profile,
+}: PublicNavbarProps) {
   return (
     <header className="h-16 bg-white/90 dark:bg-neutral-900/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800 px-4 sm:px-6 flex items-center justify-between z-30 shrink-0">
       <div className="flex items-center gap-3">
-        <ApplicationLogo appName={profile?.app_name || 'Titik Magang'} />
+        <ApplicationLogo
+          appName={profile?.app_name ?? 'Titik Magang'}
+          logoPath={profile?.logo_path ?? ''}
+        />
       </div>
 
       <div className="flex items-center gap-3">
@@ -25,7 +31,9 @@ export function PublicNavbar({ user, profile }: PublicNavbarProps) {
             className="flex items-center gap-2 px-3.5 py-2 bg-primary text-neutral-900 rounded-xl text-xs font-bold hover:bg-primary-dark transition shadow-xs"
           >
             <LayoutDashboard className="w-4 h-4" />
-            <span className="hidden sm:inline">Dashboard Admin</span>
+            <span className="hidden sm:inline">
+              Dashboard Admin
+            </span>
           </Link>
         ) : (
           <Link
@@ -40,4 +48,3 @@ export function PublicNavbar({ user, profile }: PublicNavbarProps) {
     </header>
   )
 }
-

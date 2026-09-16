@@ -67,7 +67,7 @@ export function LocationDetailSidebar({
         {images.length > 0 ? (
           <div className="relative w-full h-44 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-800 shadow-inner group">
             <img
-              src={`/${images[activeImageIndex]?.image_path}`}
+              src={images[activeImageIndex]?.image_path}
               alt={location.name_location}
               className="w-full h-full object-cover transition-transform duration-300"
             />

@@ -1,4 +1,5 @@
 import { getSession } from '@/lib/auth'
+import { getProfileWeb } from '@/lib/actions/profile'
 import { AdminLayoutShell } from '@/components/shared/AdminLayoutShell'
 
 export default async function AdminLayout({
@@ -6,8 +7,16 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
-  const user = await getSession()
+  const [user, profile] = await Promise.all([getSession(), getProfileWeb()])
 
-  return <AdminLayoutShell user={user}>{children}</AdminLayoutShell>
+  return (
+    <AdminLayoutShell
+      user={user}
+      appName={profile?.app_name ?? 'Titik Magang'}
+      logoPath={profile?.logo_path ?? ''}
+    >
+      {children}
+    </AdminLayoutShell>
+  )
 }
 

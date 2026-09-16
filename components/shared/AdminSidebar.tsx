@@ -16,9 +16,16 @@ import { ApplicationLogo } from './ApplicationLogo'
 interface AdminSidebarProps {
   isOpen: boolean
   onClose: () => void
+  appName: string
+  logoPath: string
 }
 
-export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
+export function AdminSidebar({
+  isOpen,
+  onClose,
+  appName,
+  logoPath,
+}: AdminSidebarProps) {
   const pathname = usePathname()
 
   const navItems = [
@@ -48,7 +55,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
       >
         {/* Header / Logo */}
         <div className="h-16 px-6 flex items-center justify-between border-b border-neutral-200 dark:border-neutral-800">
-          <ApplicationLogo />
+          <ApplicationLogo appName={appName} logoPath={logoPath} />
           <button
             onClick={onClose}
             className="p-1 rounded-lg text-neutral-400 hover:text-neutral-600 lg:hidden"

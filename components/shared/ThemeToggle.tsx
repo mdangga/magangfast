@@ -1,16 +1,16 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { useEffect, useState } from 'react'
+import { useSyncExternalStore } from 'react'
 import { Sun, Moon } from 'lucide-react'
 
 export function ThemeToggle({ className = '' }: { className?: string }) {
-  const [mounted, setMounted] = useState(false)
-  const { theme, setTheme, resolvedTheme } = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  )
+  const { setTheme, resolvedTheme } = useTheme()
 
   if (!mounted) {
     return <div className={`w-9 h-9 ${className}`} />

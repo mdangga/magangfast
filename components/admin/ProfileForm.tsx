@@ -13,7 +13,7 @@ export function ProfileForm({
 }) {
   const [isPending, startTransition] = useTransition()
   const [previewLogo, setPreviewLogo] = useState<string | null>(
-    initialProfile?.logo_path ? `/${initialProfile.logo_path}` : null
+    initialProfile?.logo_path ? initialProfile.logo_path : null
   )
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 

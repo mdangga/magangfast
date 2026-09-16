@@ -7,15 +7,27 @@ import { SessionUser } from '@/types'
 
 interface AdminLayoutShellProps {
   user: SessionUser | null
+  appName: string
+  logoPath: string
   children: React.ReactNode
 }
 
-export function AdminLayoutShell({ user, children }: AdminLayoutShellProps) {
+export function AdminLayoutShell({
+  user,
+  appName,
+  logoPath,
+  children,
+}: AdminLayoutShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
     <div className="min-h-screen bg-neutral-50 dark:bg-neutral-950 flex flex-col">
-      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        appName={appName}
+        logoPath={logoPath}
+      />
 
       <div className="lg:pl-64 flex flex-col flex-1">
         <AdminNavbar
@@ -30,4 +42,3 @@ export function AdminLayoutShell({ user, children }: AdminLayoutShellProps) {
     </div>
   )
 }
-
