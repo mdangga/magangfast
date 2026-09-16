@@ -1,0 +1,107 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                BigInt    @id @default(autoincrement())
+  name              String
+  email             String    @unique
+  email_verified_at DateTime?
+  password          String
+  remember_token    String?
+  created_at        DateTime? @default(now())
+  updated_at        DateTime? @updatedAt
+
+  @@map("users")
+}
+
+model Faculty {
+  id_faculty   BigInt       @id @default(autoincrement())
+  name_faculty String       @unique
+  created_at   DateTime?    @default(now())
+  updated_at   DateTime?    @updatedAt
+  departments  Department[]
+
+  @@map("faculties")
+}
+
+model Department {
+  id_department   BigInt      @id @default(autoincrement())
+  name_department String      @unique
+  degree_level    String
+  id_faculty      BigInt
+  created_at      DateTime?   @default(now())
+  updated_at      DateTime?   @updatedAt
+  faculty         Faculty     @relation(fields: [id_faculty], references: [id_faculty], onDelete: Cascade)
+  locations       Location[]
+
+  @@index([id_faculty])
+  @@map("departments")
+}
+
+model Category {
+  id_category   BigInt      @id @default(autoincrement())
+  name_category String      @unique
+  created_at    DateTime?   @default(now())
+  updated_at    DateTime?   @updatedAt
+  locations     Location[]
+
+  @@map("categories")
+}
+
+model Location {
+  id_location   BigInt      @id @default(autoincrement())
+  student_name  String
+  nim           String      @unique @db.VarChar(10)
+  name_location String      @unique
+  description   String      @db.Text
+  contact       String      @db.VarChar(15)
+  longitude     Decimal     @db.Decimal(11, 8)
+  latitude      Decimal     @db.Decimal(10, 8)
+  approved_at   DateTime?
+  id_category   BigInt
+  id_department BigInt
+  created_at    DateTime?   @default(now())
+  updated_at    DateTime?   @updatedAt
+
+  category      Category    @relation(fields: [id_category], references: [id_category], onDelete: Cascade)
+  department    Department  @relation(fields: [id_department], references: [id_department], onDelete: Cascade)
+  images        Image[]
+
+  @@unique([name_location, nim])
+  @@index([id_category])
+  @@index([id_department])
+  @@map("locations")
+}
+
+model Image {
+  id_image    BigInt    @id @default(autoincrement())
+  image_path  String    @db.Text
+  alt_text    String?   @db.Text
+  id_location BigInt
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
+  deleted_at  DateTime?
+
+  location    Location  @relation(fields: [id_location], references: [id_location], onDelete: Cascade)
+
+  @@index([id_location])
+  @@map("images")
+}
+
+model ProfileWeb {
+  id          BigInt    @id @default(autoincrement())
+  app_name    String
+  logo_path   String    @db.Text
+  description String
+  created_at  DateTime? @default(now())
+  updated_at  DateTime? @updatedAt
+
+  @@map("profile_web")
+}
+

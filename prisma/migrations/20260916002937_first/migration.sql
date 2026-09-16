@@ -1,0 +1,112 @@
+-- CreateTable
+CREATE TABLE `users` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(191) NOT NULL,
+    `email_verified_at` DATETIME(3) NULL,
+    `password` VARCHAR(191) NOT NULL,
+    `remember_token` VARCHAR(191) NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `users_email_key`(`email`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `faculties` (
+    `id_faculty` BIGINT NOT NULL AUTO_INCREMENT,
+    `name_faculty` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `faculties_name_faculty_key`(`name_faculty`),
+    PRIMARY KEY (`id_faculty`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `departments` (
+    `id_department` BIGINT NOT NULL AUTO_INCREMENT,
+    `name_department` VARCHAR(191) NOT NULL,
+    `degree_level` VARCHAR(191) NOT NULL,
+    `id_faculty` BIGINT NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `departments_name_department_key`(`name_department`),
+    INDEX `departments_id_faculty_idx`(`id_faculty`),
+    PRIMARY KEY (`id_department`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `categories` (
+    `id_category` BIGINT NOT NULL AUTO_INCREMENT,
+    `name_category` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `categories_name_category_key`(`name_category`),
+    PRIMARY KEY (`id_category`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `locations` (
+    `id_location` BIGINT NOT NULL AUTO_INCREMENT,
+    `student_name` VARCHAR(191) NOT NULL,
+    `nim` VARCHAR(10) NOT NULL,
+    `name_location` VARCHAR(191) NOT NULL,
+    `description` TEXT NOT NULL,
+    `contact` VARCHAR(15) NOT NULL,
+    `longitude` DECIMAL(11, 8) NOT NULL,
+    `latitude` DECIMAL(10, 8) NOT NULL,
+    `approved_at` DATETIME(3) NULL,
+    `id_category` BIGINT NOT NULL,
+    `id_department` BIGINT NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    UNIQUE INDEX `locations_nim_key`(`nim`),
+    UNIQUE INDEX `locations_name_location_key`(`name_location`),
+    INDEX `locations_id_category_idx`(`id_category`),
+    INDEX `locations_id_department_idx`(`id_department`),
+    UNIQUE INDEX `locations_name_location_nim_key`(`name_location`, `nim`),
+    PRIMARY KEY (`id_location`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `images` (
+    `id_image` BIGINT NOT NULL AUTO_INCREMENT,
+    `image_path` TEXT NOT NULL,
+    `alt_text` TEXT NULL,
+    `id_location` BIGINT NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+    `deleted_at` DATETIME(3) NULL,
+
+    INDEX `images_id_location_idx`(`id_location`),
+    PRIMARY KEY (`id_image`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `profile_web` (
+    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `app_name` VARCHAR(191) NOT NULL,
+    `logo_path` TEXT NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
+    `created_at` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updated_at` DATETIME(3) NULL,
+
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- AddForeignKey
+ALTER TABLE `departments` ADD CONSTRAINT `departments_id_faculty_fkey` FOREIGN KEY (`id_faculty`) REFERENCES `faculties`(`id_faculty`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `locations` ADD CONSTRAINT `locations_id_category_fkey` FOREIGN KEY (`id_category`) REFERENCES `categories`(`id_category`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `locations` ADD CONSTRAINT `locations_id_department_fkey` FOREIGN KEY (`id_department`) REFERENCES `departments`(`id_department`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `images` ADD CONSTRAINT `images_id_location_fkey` FOREIGN KEY (`id_location`) REFERENCES `locations`(`id_location`) ON DELETE CASCADE ON UPDATE CASCADE;
